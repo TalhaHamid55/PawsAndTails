@@ -1,24 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { decodeToken } from "../utils/decodeToken";
+
+const tokenFromStorage = localStorage.getItem("token");
+const decodedUser = tokenFromStorage ? decodeToken(tokenFromStorage) : null;
+
+console.log("tokenFromStorage:", tokenFromStorage);
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
-    token: null,
+    user: decodedUser,
+    token: tokenFromStorage,
+    isAuthenticated: !!decodedUser,
   },
   reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
-    setToken: (state, action) => {
-      state.token = action.payload;
+    setCredentials: (state, action) => {
+      const { token } = action.payload;
+      state.token = token;
+      state.user = decodeToken(token);
+      state.isAuthenticated = !!token;
     },
     logout: (state) => {
-      state.user = null;
       state.token = null;
+      state.user = null;
+      state.isAuthenticated = false;
+      localStorage.removeItem("token");
     },
   },
 });
 
-export const { setUser, setToken, logout } = authSlice.actions;
+export const { setCredentials, logout } = authSlice.actions;
 export default authSlice.reducer;

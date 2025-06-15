@@ -1,0 +1,45 @@
+.dashboard-layout-container {
+  display: flex;
+  height: calc(100dvh - 142px);
+  overflow: hidden;
+}
+
+.dashboard-layout-container aside {
+  width: 250px;
+  border-left: 1px solid #f4f4f4;
+  background-color: white;
+}
+
+.dashboard-layout-container aside ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+.dashboard-layout-container aside ul li {
+  display: block;
+  border-radius: 8px;
+}
+
+.dashboard-layout-container aside ul a {
+  text-decoration: none;
+  color: #101828;
+  padding: 12px;
+  display: block;
+}
+.dashboard-layout-container aside ul a.active {
+  background-color: #ff7700;
+  border-bottom: 2px solid #111;
+}
+
+.dashboard-layout-container section {
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 24px;
+  background-color: cadetblue;
+  flex: 1;
+}

@@ -1,43 +1,63 @@
-import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setUser, setToken } from "../features/authSlice";
+import { useSignInMutation } from "../apis/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { setCredentials } from "../features/authSlice";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [login, { isLoading }] = useSignInMutation();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/dashboard");
+  }, [isAuthenticated]);
 
   const handleLogin = async (values) => {
-    setLoading(true);
     try {
-      const response = await axios.post("/api/auth/login", values);
-      dispatch(setUser(response.data.user));
-      dispatch(setToken(response.data.token));
-      console.log("Login successful");
+      const response = await login(values).unwrap();
+
+      localStorage.setItem("token", response.token);
+      dispatch(setCredentials(response));
+
+      toast.success("Login successful");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
-    } finally {
-      setLoading(false);
+      toast.error("Invalid email or password");
     }
   };
 
   return (
-    <Form onFinish={handleLogin} layout="vertical">
-      <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-        {" "}
-        <Input />{" "}
-      </Form.Item>
-      <Form.Item name="password" label="Password" rules={[{ required: true }]}>
-        {" "}
-        <Input.Password />{" "}
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Login
-        </Button>
-      </Form.Item>
-    </Form>
+    <div className="auth-page-container">
+      <Form form={form} onFinish={handleLogin} layout="vertical">
+        <Form.Item
+          name="email"
+          label="Email"
+          initialValue="hassan@gmail.com"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          label="Password"
+          initialValue="123456789"
+          rules={[{ required: true }]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={isLoading}>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
