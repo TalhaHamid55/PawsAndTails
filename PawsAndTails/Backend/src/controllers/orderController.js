@@ -1,46 +1,125 @@
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 
-// Create Order
 exports.createOrder = async (req, res) => {
-  const { products, totalAmount } = req.body;
   try {
     const newOrder = await Order.create({
-      user: req.user.id,
-      products,
-      totalAmount,
+      ...req.body,
+      userId: req.user.id,
     });
     res.status(201).json({ order: newOrder });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to create order", error });
   }
 };
 
-// Get All Orders
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await Order.find()
-      .populate("user", "username email")
-      .populate("products.product", "name price");
+    const filter = req.user.role === "admin" ? {} : { userId: req.user.id };
+    const orders = await Order.find(filter).populate("items.productId");
     res.json({ orders });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Error fetching orders", error });
   }
 };
 
-// Get Order By ID
+exports.updateOrderStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ message: "Status is required" });
+  }
+
+  try {
+    const updated = await Order.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Status updated", order: updated });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+exports.getOrderDetailsById = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).populate(
+      "items.productId"
+    );
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    if (order.userId.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const products = order.items.map((item) => {
+      const product = item.productId;
+      return {
+        _id: product._id,
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        category: product.category,
+        petType: product.petType,
+        brand: product.brand,
+        rating: product.rating,
+        image: product.image,
+        stock: product.stock,
+        quantity: item.quantity,
+      };
+    });
+
+    const response = {
+      _id: order._id,
+      userId: order.userId,
+      totalAmount: order.totalAmount,
+      status: order.status,
+      address: order.address,
+      firstName: order.firstName,
+      lastName: order.lastName,
+      city: order.city,
+      state: order.state,
+      phoneNumber: order.phoneNumber,
+      zipCode: order.zipCode,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+      products,
+    };
+
+    res.json({ order: response });
+  } catch (error) {
+    console.error("Error getting order:", error);
+    res.status(500).json({ message: "Error retrieving order", error });
+  }
+};
+
 exports.getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id)
-      .populate("user", "username email")
-      .populate("products.product", "name price");
+    const order = await Order.findById(req.params.id).populate(
+      "items.productId"
+    );
+
     if (!order) return res.status(404).json({ message: "Order not found" });
+
+    if (order.userId.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
     res.json({ order });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Error retrieving order", error });
   }
 };
 
-// Update Order
 exports.updateOrder = async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
@@ -50,16 +129,15 @@ exports.updateOrder = async (req, res) => {
     );
     res.json({ order: updatedOrder });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to update order", error });
   }
 };
 
-// Delete Order
 exports.deleteOrder = async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id);
-    res.json({ message: "Order deleted" });
+    res.json({ message: "Order deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to delete order", error });
   }
 };

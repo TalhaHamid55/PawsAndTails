@@ -6,22 +6,20 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
+  getProductsbyFilters,
 } = require("../controllers/productController");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Create Product (Admin Only)
-router.post("/", authMiddleware, createProduct);
+router.post("/add", authMiddleware, createProduct);
 
-// Get All Products
-router.get("/", getProducts);
+router.get("/getAll", getProducts);
 
-// Get Product By ID
+router.get("/getAllProductsByFilters", getProductsbyFilters);
+
 router.get("/:id", getProductById);
 
-// Update Product (Admin Only)
 router.put("/:id", authMiddleware, updateProduct);
 
-// Delete Product (Admin Only)
 router.delete("/:id", authMiddleware, deleteProduct);
 
 module.exports = router;

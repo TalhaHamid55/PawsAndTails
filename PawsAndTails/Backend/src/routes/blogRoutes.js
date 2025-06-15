@@ -6,22 +6,20 @@ const {
   getBlogById,
   updateBlog,
   deleteBlog,
+  getBlogsByFilters,
 } = require("../controllers/blogController");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Create Blog Post (Admin Only)
-router.post("/", authMiddleware, createBlog);
+router.post("/add", authMiddleware, createBlog);
 
-// Get All Blog Posts
-router.get("/", getBlogs);
+router.get("/getAll", getBlogs);
 
-// Get Blog Post By ID
+router.get("/getAllBlogsByFilters", getBlogsByFilters);
+
 router.get("/:id", getBlogById);
 
-// Update Blog Post (Admin Only)
 router.put("/:id", authMiddleware, updateBlog);
 
-// Delete Blog Post (Admin Only)
 router.delete("/:id", authMiddleware, deleteBlog);
 
 module.exports = router;

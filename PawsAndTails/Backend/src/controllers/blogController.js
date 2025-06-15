@@ -1,12 +1,13 @@
 const Blog = require("../models/Blog");
 
-// Create Blog Post
 exports.createBlog = async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, image, category } = req.body;
   try {
     const newBlog = await Blog.create({
+      image,
       title,
       content,
+      category,
       createdBy: req.user.id,
     });
     res.status(201).json({ blog: newBlog });
@@ -15,7 +16,27 @@ exports.createBlog = async (req, res) => {
   }
 };
 
-// Get All Blog Posts
+exports.getBlogsByFilters = async (req, res) => {
+  try {
+    const { search, category } = req.query;
+    const filter = {};
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (category) filter.category = category;
+
+    const blogs = await Blog.find(filter);
+    res.json({ blogs });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 exports.getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().populate("createdBy", "username");
@@ -25,7 +46,6 @@ exports.getBlogs = async (req, res) => {
   }
 };
 
-// Get Blog Post By ID
 exports.getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id).populate(
@@ -39,7 +59,6 @@ exports.getBlogById = async (req, res) => {
   }
 };
 
-// Update Blog Post
 exports.updateBlog = async (req, res) => {
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
@@ -51,7 +70,6 @@ exports.updateBlog = async (req, res) => {
   }
 };
 
-// Delete Blog Post
 exports.deleteBlog = async (req, res) => {
   try {
     await Blog.findByIdAndDelete(req.params.id);

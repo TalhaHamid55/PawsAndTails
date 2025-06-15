@@ -3,21 +3,20 @@ const router = express.Router();
 const {
   registerUser,
   loginUser,
-  getUser,
+  getUserDetails,
   updateUser,
+  getUserDetailsById,
 } = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Register
 router.post("/register", registerUser);
 
-// Login
 router.post("/login", loginUser);
 
-// Get User (Protected)
-router.get("/user/:id", authMiddleware, getUser);
+router.get("/getUserDetails", authMiddleware, getUserDetails);
 
-// Update User (Protected)
+router.get("/user/:id", authMiddleware, getUserDetailsById);
+
 router.put("/user/:id", authMiddleware, updateUser);
 
 module.exports = router;

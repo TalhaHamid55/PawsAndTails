@@ -6,22 +6,23 @@ const {
   getOrderById,
   updateOrder,
   deleteOrder,
+  getOrderDetailsById,
+  updateOrderStatus,
 } = require("../controllers/orderController");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Create Order (User Only)
-router.post("/", authMiddleware, createOrder);
+router.post("/add", authMiddleware, createOrder);
 
-// Get All Orders (Admin Only)
-router.get("/", authMiddleware, getOrders);
+router.get("/getAllOrders", authMiddleware, getOrders);
 
-// Get Order By ID
+router.get("/getOrderDetailsById/:id", authMiddleware, getOrderDetailsById);
+
 router.get("/:id", authMiddleware, getOrderById);
 
-// Update Order (Admin Only)
 router.put("/:id", authMiddleware, updateOrder);
 
-// Delete Order (Admin Only)
 router.delete("/:id", authMiddleware, deleteOrder);
+
+router.put("/:id/status", updateOrderStatus);
 
 module.exports = router;
