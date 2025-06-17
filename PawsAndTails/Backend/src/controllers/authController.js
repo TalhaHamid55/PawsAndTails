@@ -80,8 +80,14 @@ exports.getUserDetails = async (req, res) => {
 
 exports.getUserDetailsById = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.params.id).select("-password");
+
     if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (req.user.role !== "admin" && req.user.id !== req.params.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
     res.json({ user });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -96,5 +102,38 @@ exports.updateUser = async (req, res) => {
     res.json({ user: updatedUser });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.getUsersbyFilters = async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    const filter = {};
+
+    if (search) {
+      filter.$or = [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { username: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const users = await User.find(filter).select("-password");
+
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error("Error getting filtered users:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
