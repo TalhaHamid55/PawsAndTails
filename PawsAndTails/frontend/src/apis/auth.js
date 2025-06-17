@@ -4,7 +4,8 @@ import { createBaseQuery } from "./createBaseQuery";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: createBaseQuery("/auth"),
-  tagTypes: ["getUserDetail"],
+  tagTypes: ["getUserDetail", "userList"],
+
   endpoints: (build) => ({
     signIn: build.mutation({
       query: (credentials) => ({
@@ -25,25 +26,48 @@ export const authApi = createApi({
         url: "/getUserDetails",
         method: "GET",
       }),
-      providesTags: (result) =>
-        result?.adoptions
-          ? [
-              ...result.adoptions.map(({ id }) => ({
-                type: "getUserDetail",
-                id,
-              })),
-              { type: "getUserDetail", id: "LIST" },
-            ]
-          : [{ type: "getUserDetail", id: "LIST" }],
+      providesTags: [{ type: "getUserDetail", id: "LIST" }],
     }),
+    getAllUsersByFilters: build.query({
+      query: ({ search }) => {
+        const params = new URLSearchParams();
 
+        if (search) params.append("search", search);
+
+        return {
+          url: `/getUsersByFilter?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: [{ type: "getUserDetail", id: "LIST" }],
+    }),
     updateUserDetails: build.mutation({
       query: ({ id, data }) => ({
         url: `/user/${id}`,
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: [{ type: "getUserDetail", id: "LIST" }],
+      invalidatesTags: [
+        { type: "getUserDetail", id: "LIST" },
+        { type: "userList", id: "LIST" },
+      ],
+    }),
+    deleteUser: build.mutation({
+      query: ({ id }) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [
+        { type: "getUserDetail", id: "LIST" },
+        { type: "userList", id: "LIST" },
+      ],
+    }),
+
+    getUserById: build.query({
+      query: ({ id }) => ({
+        url: `/user/${id}`,
+        method: "GET",
+      }),
     }),
   }),
 });
@@ -53,4 +77,7 @@ export const {
   useRegisterMutation,
   useGetUserDetailsQuery,
   useUpdateUserDetailsMutation,
+  useGetAllUsersByFiltersQuery,
+  useDeleteUserMutation,
+  useGetUserByIdQuery,
 } = authApi;

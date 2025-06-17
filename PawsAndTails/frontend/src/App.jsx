@@ -30,6 +30,7 @@ import Orders from "./pages/Orders";
 import Appointments from "./pages/Appointments";
 import SinglePost from "./pages/singlePost";
 import RoleRoute from "./components/RoleRoute";
+import DashboardUsers from "./pages/DashboardUsers";
 
 function App() {
   const dispatch = useDispatch();
@@ -76,6 +77,7 @@ function App() {
               <Route path="products" element={<Products />} />
               <Route path="petgrooming" element={<PetGrooming />} />
               <Route path="blogs" element={<DashboardBlogs />} />
+              <Route path="users" element={<DashboardUsers />} />
             </Route>
 
             <Route path="unauthorized" element={<p>Access Denied</p>} />
