@@ -11,6 +11,8 @@ const PetAdoptionCard = ({
   petType,
   location,
   description,
+  address,
+  contact,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [breedName, setBreedName] = useState("");
@@ -53,6 +55,12 @@ const PetAdoptionCard = ({
         footer={<></>}
       >
         <p>{description}</p>
+        <p>
+          <strong>Address:</strong> {address}
+          <br />
+          <strong>Contact:</strong>
+          <a href={`tel:${contact}`}>{contact}</a>
+        </p>
       </Modal>
     </>
   );

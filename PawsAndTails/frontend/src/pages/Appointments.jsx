@@ -39,6 +39,12 @@ const Appointments = () => {
     { title: "Category", dataIndex: "category", key: "category" },
     { title: "Description", dataIndex: "description", key: "description" },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      hidden: user.role === "admin",
+    },
+    {
       title: "Action",
       key: "action",
       hidden: user.role !== "admin",

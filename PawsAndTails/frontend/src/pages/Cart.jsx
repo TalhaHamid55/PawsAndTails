@@ -203,6 +203,10 @@ const Cart = () => {
           >
             <Input.TextArea />
           </Form.Item>
+          <p>
+            You can also pay online. Pay on our easypaisa and Jazzcash
+            0327-3391289
+          </p>
 
           <Form.Item label={null}>
             <Button

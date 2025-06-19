@@ -31,6 +31,12 @@ const Orders = () => {
     { title: "Zip Code", dataIndex: "zipCode", key: "zipCode" },
     { title: "Address", dataIndex: "address", key: "address" },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      hidden: user.role === "admin",
+    },
+    {
       title: "Action",
       key: "action",
       hidden: user.role !== "admin",

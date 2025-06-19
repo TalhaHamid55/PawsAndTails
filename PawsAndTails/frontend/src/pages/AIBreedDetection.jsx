@@ -1,29 +1,8 @@
-import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const AIBreedDetection = () => {
-  const [image, setImage] = useState(null);
-  const [breed, setBreed] = useState("");
-
-  const handleUpload = async () => {
-    debugger;
-    const formData = new FormData();
-    formData.append("image", image);
-
-    const res = await fetch("http://localhost:5000/api/predict", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-    setBreed(data.breed); // Show the result
-  };
-
   return (
     <div style={{ padding: "50px 25px" }}>
-      {/* <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-      <button onClick={handleUpload}>Detect Breed</button>
-      {breed && <h2>Breed: {breed}</h2>} */}
-
       <div className="info-section">
         <h1>Paws & Tails: AI Breed Detection</h1>
         <p>
@@ -54,12 +33,9 @@ const AIBreedDetection = () => {
         </div>
 
         <div className="action-btn">
-          <a
-            href="https://huggingface.co/spaces/Fahad0690/dog-breed-detector"
-            target="_blank"
-          >
+          <Link to="/breed-detector" target="_blank">
             <button>AI Breed Detection</button>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

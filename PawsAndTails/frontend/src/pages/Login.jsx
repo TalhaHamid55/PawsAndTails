@@ -35,18 +35,12 @@ const Login = () => {
   return (
     <div className="auth-page-container">
       <Form form={form} onFinish={handleLogin} layout="vertical">
-        <Form.Item
-          name="email"
-          label="Email"
-          initialValue="hassan@gmail.com"
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="email" label="Email" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item
           name="password"
           label="Password"
-          initialValue="123456789"
           rules={[{ required: true }]}
         >
           <Input.Password />

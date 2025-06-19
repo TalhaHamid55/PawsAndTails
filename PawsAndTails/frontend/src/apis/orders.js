@@ -35,7 +35,6 @@ export const ordersApi = createApi({
       query: ({ search, orderNumber }) => {
         const params = new URLSearchParams();
         if (search) params.append("search", search);
-        if (orderNumber) params.append("orderNumber", orderNumber);
         return {
           url: `/getAllOrders?${params.toString()}`,
           method: "GET",

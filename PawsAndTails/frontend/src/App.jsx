@@ -31,6 +31,7 @@ import Appointments from "./pages/Appointments";
 import SinglePost from "./pages/singlePost";
 import RoleRoute from "./components/RoleRoute";
 import DashboardUsers from "./pages/DashboardUsers";
+import BreedDetection from "./pages/BreedDetection";
 
 function App() {
   const dispatch = useDispatch();
@@ -63,6 +64,7 @@ function App() {
         <Route path="/ai-breed-detection" element={<AIBreedDetection />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/single-post/:id" element={<SinglePost />} />
+        <Route path="/breed-detector" element={<BreedDetection />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>

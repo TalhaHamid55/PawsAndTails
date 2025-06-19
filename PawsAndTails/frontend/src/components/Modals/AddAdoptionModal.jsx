@@ -130,7 +130,32 @@ const AddAdoptionModal = ({ open, onClose, id }) => {
           >
             <Input.TextArea rows={3} placeholder="Enter adoption description" />
           </Form.Item>
-
+          <Form.Item
+            name="address"
+            label="Address"
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea rows={3} placeholder="Enter adoption address" />
+          </Form.Item>
+          <Form.Item
+            label="Contact Number"
+            name="contact"
+            rules={[
+              {
+                required: true,
+                message: "Please Input Contact Number!",
+              },
+            ]}
+            style={{ flex: 1 }}
+          >
+            <InputNumber
+              minLength={11}
+              maxLength={11}
+              addonBefore="+92"
+              style={{ width: "100%" }}
+              controls={false}
+            />
+          </Form.Item>
           <Form.Item
             label="Age"
             name="age"
