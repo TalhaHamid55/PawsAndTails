@@ -3,8 +3,18 @@ const moment = require("moment");
 const { getAgeString } = require("../utils/common");
 
 exports.createAdoption = async (req, res) => {
-  const { name, description, petType, image, breed, age, location, available } =
-    req.body;
+  const {
+    name,
+    description,
+    petType,
+    image,
+    breed,
+    age,
+    location,
+    contact,
+    address,
+    available,
+  } = req.body;
 
   try {
     const newAdoption = await Adoption.create({
@@ -16,6 +26,8 @@ exports.createAdoption = async (req, res) => {
       age,
       location,
       available,
+      address,
+      contact,
       createdBy: req.user.id,
     });
     res.status(201).json({ adoption: newAdoption });
@@ -43,6 +55,7 @@ exports.getAdoptionsbyFilters = async (req, res) => {
       filter.$or = [
         { name: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
+        { address: { $regex: search, $options: "i" } },
       ];
     }
 

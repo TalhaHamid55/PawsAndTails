@@ -1,5 +1,6 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
+const { getCurrentActiveUserdetails } = require("../utils/common");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -15,7 +16,39 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   try {
-    const filter = req.user.role === "admin" ? {} : { userId: req.user.id };
+    const { search } = req.query;
+    const user = await getCurrentActiveUserdetails(req);
+
+    const baseFilter = user.role === "admin" ? {} : { userId: user.id };
+
+    const searchFilter = {};
+
+    if (search) {
+      const regex = new RegExp(search, "i");
+      const searchOr = [
+        { firstName: { $regex: regex } },
+        { lastName: { $regex: regex } },
+        { address: { $regex: regex } },
+        { city: { $regex: regex } },
+        { state: { $regex: regex } },
+        { zipCode: { $regex: regex } },
+        { phoneNumber: { $regex: regex } },
+        { status: { $regex: regex } },
+      ];
+
+      if (!isNaN(search)) {
+        const numberSearch = parseFloat(search);
+        searchOr.push(
+          { totalAmount: numberSearch },
+          { "items.quantity": numberSearch }
+        );
+      }
+
+      searchFilter.$or = searchOr;
+    }
+
+    const filter = search ? { ...baseFilter, ...searchFilter } : baseFilter;
+
     const orders = await Order.find(filter).populate("items.productId");
     res.json({ orders });
   } catch (error) {

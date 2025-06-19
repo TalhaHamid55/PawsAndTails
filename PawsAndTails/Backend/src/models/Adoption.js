@@ -9,6 +9,8 @@ const adoptionSchema = new mongoose.Schema(
     age: { type: String, required: true },
     petType: { type: String, required: true },
     image: { type: String },
+    contact: { type: String },
+    address: { type: String },
     available: { type: Boolean },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
