@@ -11,6 +11,7 @@ const adoptionSchema = new mongoose.Schema(
     image: { type: String },
     contact: { type: String },
     address: { type: String },
+    ownerName: { type: String },
     available: { type: Boolean },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
