@@ -13,6 +13,7 @@ const PetAdoptionCard = ({
   description,
   address,
   contact,
+  ownerName,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [breedName, setBreedName] = useState("");
@@ -56,6 +57,8 @@ const PetAdoptionCard = ({
       >
         <p>{description}</p>
         <p>
+          <strong>Owner Name:</strong> {ownerName}
+          <br />
           <strong>Address:</strong> {address}
           <br />
           <strong>Contact:</strong>

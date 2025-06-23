@@ -16,7 +16,7 @@ const BlogContainer = ({ category }) => {
           <Spin />
         </div>
       ) : (
-        <Row gutter={32} align="stretch">
+        <Row gutter={[32, 32]} align="stretch">
           {data?.blogs?.map((item) => (
             <Col span={8}>
               <PostCard key={item._id} {...item} />

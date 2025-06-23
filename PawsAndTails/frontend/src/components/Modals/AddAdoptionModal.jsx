@@ -138,6 +138,13 @@ const AddAdoptionModal = ({ open, onClose, id }) => {
             <Input.TextArea rows={3} placeholder="Enter adoption address" />
           </Form.Item>
           <Form.Item
+            name="ownerName"
+            label="Owner Name"
+            rules={[{ required: true }]}
+          >
+            <Input placeholder="Enter Owner's Name" />
+          </Form.Item>
+          <Form.Item
             label="Contact Number"
             name="contact"
             rules={[
