@@ -8,7 +8,7 @@ const BreedDetection = () => {
   const [breed, setBreed] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const inputRef = useRef(null); // Create a ref for the file input
+  const inputRef = useRef(null);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -44,7 +44,7 @@ const BreedDetection = () => {
     setPreview(null);
     setBreed("");
     if (inputRef.current) {
-      inputRef.current.value = ""; // Clear the file input manually
+      inputRef.current.value = "";
     }
   };
 

@@ -60,7 +60,7 @@ const Register = () => {
           <Input />
         </Form.Item>
         <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-          <Input />
+          <Input type="email" />
         </Form.Item>
         <Form.Item
           name="password"

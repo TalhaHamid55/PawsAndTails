@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Table, Button, Image, Flex, Modal, Input } from "antd";
 import AddAdoptionModal from "../components/Modals/AddAdoptionModal";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 
 import {
   useGetAllAdoptionsByFiltersQuery,
@@ -34,6 +32,7 @@ const PetAdoptions = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "description", key: "description" },
     { title: "Location", dataIndex: "location", key: "location" },
+    { title: "Owner's Name", dataIndex: "ownerName", key: "ownerName" },
     { title: "PetType", dataIndex: "petType", key: "petType" },
     { title: "Breed", dataIndex: "breed", key: "breed" },
     { title: "Age", dataIndex: "petAge", key: "petAge" },

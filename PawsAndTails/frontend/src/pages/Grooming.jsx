@@ -104,7 +104,7 @@ const Grooming = () => {
               {!data || data.groomings.length === 0 ? (
                 <div className="empty-state">No Service Found.</div>
               ) : (
-                <Row gutter={32}>
+                <Row gutter={[32, 32]}>
                   {data.groomings.map((item) => (
                     <Col span={8}>
                       <GroomingCard key={item._id} {...item} />

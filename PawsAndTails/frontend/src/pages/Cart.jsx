@@ -25,6 +25,11 @@ const Cart = () => {
   const total = subTotalPrice + TAX + SHIPPINGCHARGES;
 
   const onSubmit = async (values) => {
+    if (user === null) {
+      toast.error("Please Login to Place Order.");
+      return;
+    }
+
     const items = cartItems.map((k) => ({
       productId: k.productId,
       quantity: k.quantity,

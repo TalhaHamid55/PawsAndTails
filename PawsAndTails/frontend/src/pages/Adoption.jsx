@@ -99,7 +99,7 @@ const Adoption = () => {
               {!data || data.adoptions.length === 0 ? (
                 <div className="empty-state">No Pet Found.</div>
               ) : (
-                <Row gutter={32}>
+                <Row gutter={[32, 32]}>
                   {data.adoptions.map((item) => (
                     <Col span={8}>
                       <PetAdoptionCard key={item._id} {...item} />
