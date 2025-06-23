@@ -14,6 +14,7 @@ exports.createAdoption = async (req, res) => {
     contact,
     address,
     available,
+    ownerName,
   } = req.body;
 
   try {
@@ -28,6 +29,7 @@ exports.createAdoption = async (req, res) => {
       available,
       address,
       contact,
+      ownerName,
       createdBy: req.user.id,
     });
     res.status(201).json({ adoption: newAdoption });
@@ -56,6 +58,7 @@ exports.getAdoptionsbyFilters = async (req, res) => {
         { name: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
         { address: { $regex: search, $options: "i" } },
+        { ownerName: { $regex: search, $options: "i" } },
       ];
     }
 
